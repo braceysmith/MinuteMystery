@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class portalGrow : MonoBehaviour
 {
-    Vector3 endScale = new Vector3(20,20,20);
+    Vector3 endScale = new Vector3(15,15,15);
     bool hit = false;
 
     public delegate void Magic();
@@ -26,6 +26,8 @@ public class portalGrow : MonoBehaviour
         while (transform.lossyScale != endScale)
         {
             transform.localScale = Vector3.MoveTowards(transform.localScale, endScale, .2f);
+
+            
             yield return null;
         }
         WandEvent();
