@@ -17,10 +17,14 @@ public class wandManager : MonoBehaviour
     public GameObject[] rip;
     bool fired = false;
     int worldNum = 0;
-
+    //public float speed;
+    //Rigidbody wtrb;
+    //Vector3 lastPosition;
+    //int swish = 0;
     // Start is called before the first frame update
     void Start()
     {
+        //wtrb = wandtip.GetComponent<Rigidbody>();
         //RipsFalse();
         projectile1 = Resources.Load("projectile1") as GameObject;
         projectile2 = Resources.Load("projectile2") as GameObject;
@@ -55,14 +59,6 @@ public class wandManager : MonoBehaviour
         fired = false;
     }
 
-   /* void RipsFalse()
-    {
-        rip[0].SetActive(false);
-        rip[1].SetActive(false);
-        rip[2].SetActive(false);
-        rip[3].SetActive(false);
-    }*/
-
     void Projectile(GameObject p)
     {
         GameObject warp = Instantiate(p) as GameObject;
@@ -86,6 +82,9 @@ public class wandManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //speed = (transform.position - lastPosition).magnitude/Time.deltaTime;
+        //lastPosition = transform.position;
+
         if (fired == true) {
             if (OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger) || OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger))
             {
@@ -130,10 +129,6 @@ public class wandManager : MonoBehaviour
                 }
             }
         }
-       /* else if (OVRInput.GetUp(OVRInput.Button.One) || OVRInput.GetUp(OVRInput.Button.Three))
-        {
-            RipsFalse();
-        }*/
 
     }
 }

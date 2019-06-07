@@ -49,14 +49,19 @@ public class MushroomFloat : MonoBehaviour
     private void HandleOut()
     {
         StopCoroutine("FloatToTarget");
-        seen = false;
         GetComponent<SphereCollider>().radius = GetComponent<SphereCollider>().radius /2;
         FallToGround();
     }
 
     IEnumerator FloatToTarget()
     {
-        while(transform.position != target.transform.position)
+        if (seen == false)
+        {
+            yield return new WaitForSeconds(1);
+            seen = true;
+        }
+
+        while (transform.position != target.transform.position)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime / 4);
             transform.Rotate(.5f, 1, 1);
