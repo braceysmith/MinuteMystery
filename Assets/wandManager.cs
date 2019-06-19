@@ -19,6 +19,7 @@ public class wandManager : MonoBehaviour
     GameObject portal4;
     GameObject newTrail;
     GameObject newDisk;
+    GameObject portalBullet1;
 
     public GameObject portalPoint;
     public GameObject wandtip;
@@ -27,6 +28,7 @@ public class wandManager : MonoBehaviour
     //bools
     bool fired = false;
     bool diskOn = false;
+    bool portalFired = false;
 
     //inta
     int worldNum = 0;
@@ -46,6 +48,7 @@ public class wandManager : MonoBehaviour
         portal2 = Resources.Load("PortalDisk2") as GameObject;
         portal3 = Resources.Load("PortalDisk3") as GameObject;
         portal4 = Resources.Load("PortalDisk4") as GameObject;
+        portalBullet1 = Resources.Load("PortalBullet1") as GameObject;
     }
 
     private void OnEnable()
@@ -109,6 +112,7 @@ public class wandManager : MonoBehaviour
 
     IEnumerator ShinkDisk()
     {
+        
         while(newDisk.transform.localScale != Vector3.zero)
         {
             newDisk.transform.localScale = Vector3.MoveTowards(newDisk.transform.localScale, Vector3.zero, .2f);
@@ -118,9 +122,19 @@ public class wandManager : MonoBehaviour
         diskOn = false;
     }
 
+    IEnumerator PortalShot(GameObject p)
+    {
+        GameObject newShot = Instantiate(p) as GameObject;
+        newShot.transform.position = wandtip.transform.position;
+        while (p.transform.lossyScale != Vector3.zero)
+        {
+            yield return null;
+        }
+    }
+
     // Update is called once per frame
     void Update()
-    {
+        {
         //speed = (transform.position - lastPosition).magnitude/Time.deltaTime;
         //lastPosition = transform.position;
 
@@ -202,27 +216,6 @@ public class wandManager : MonoBehaviour
             {
                 if (worldNum == 0)
                 {
-                    PortalDisk(portal2);
-                }
-                else if (worldNum == 1)
-                {
-                    PortalDisk(portal3);
-                }
-                else if (worldNum == 2)
-                {
-                    PortalDisk(portal4);
-                }
-                else if (worldNum == 3)
-                {
-                    PortalDisk(portal1);
-                }
-                //diskOn = true;
-                fired = true;
-                wandCycle++;
-            }else if (fired == true && wandCycle == 1)
-            {
-                if (worldNum == 0)
-                {
                     Trail(trail2);
                 }
                 else if (worldNum == 1)
@@ -237,8 +230,30 @@ public class wandManager : MonoBehaviour
                 {
                     Trail(trail1);
                 }
+                fired = true;
                 wandCycle++;
-            }else if (wandCycle == 2)
+            }
+            else if (fired == true && wandCycle == 1)
+            {
+                if (worldNum == 0)
+                {
+                    PortalDisk(portal2);
+                }
+                else if (worldNum == 1)
+                {
+                    PortalDisk(portal3);
+                }
+                else if (worldNum == 2)
+                {
+                    PortalDisk(portal4);
+                }
+                else if (worldNum == 3)
+                {
+                    PortalDisk(portal1);
+                }
+                wandCycle++;
+            }
+            else if (wandCycle == 2)
             {
                 Destroy(newDisk);
                 if (worldNum == 0)
@@ -261,5 +276,29 @@ public class wandManager : MonoBehaviour
             }
         }
 
+        if (OVRInput.GetDown(OVRInput.Button.One) || OVRInput.GetDown(OVRInput.Button.Three))
+        {
+            if (portalFired == false)
+            {
+                if (worldNum == 0)
+                {
+                    StartCoroutine(PortalShot(portalBullet1));
+                }/*
+                    else if (worldNum == 1)
+                    {
+                        PortalDisk(portal3);
+                    }
+                    else if (worldNum == 2)
+                    {
+                        PortalDisk(portal4);
+                    }
+                    else if (worldNum == 3)
+                    {
+                        PortalDisk(portal1);
+                    }*/
+                portalFired = true;
+            }
+        }
+        
     }
 }
